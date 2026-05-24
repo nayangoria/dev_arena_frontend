@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "../api/axiosInstance"
 import { useAuth } from "../Context/AuthContext"
 
-export function Leaderboard() {
+export function LeaderBoard() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [leaderboard, setLeaderboard] = useState([])

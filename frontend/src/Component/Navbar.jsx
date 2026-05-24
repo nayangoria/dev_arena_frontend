@@ -31,6 +31,12 @@ function Navbar() {
                 >
                     Problems
                 </button>
+                 <button
+                    onClick={() => navigate("/leaderboard")}
+                    className="text-slate-600 hover:text-violet-600 font-medium transition-colors duration-200"
+                >
+                    LeaderBoard
+                </button>
                 <button 
                 onClick={() => navigate("/lobby")}
                 className="text-slate-600 hover:text-violet-600 font-medium transition-colors duration-200">Battle</button>
