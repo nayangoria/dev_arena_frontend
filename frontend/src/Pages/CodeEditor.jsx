@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react"
 import { useState } from "react";
 import axios from "../api/axiosInstance";
-import { useAuth } from "../Context/AuthContext";
+// import { useAuth } from "../Context/AuthContext";
 
 const starterCode = {
     javascript: `// Write your solution here
