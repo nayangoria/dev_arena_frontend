@@ -5,12 +5,14 @@ import SockJS from "sockjs-client";
 export function useBattleSocket(roomCode, onMessageReceived,onRoomUpdate) {
     // useRef stores the STOMP client without causing re-renders
     const clientRef = useRef(null)
+    const WS_URL = import.meta.env.VITE_WS_URL || "http://localhost:8080/ws"
+
 
     useEffect(() => {
         // Step 1 — Create STOMP client
         const client = new Client({
             // Step 2 — Use SockJS to connect to our backend
-            webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+            webSocketFactory: () => new SockJS(WS_URL),
 
             // Step 3 — Heartbeat settings match our backend
             heartbeatIncoming: 10000,
