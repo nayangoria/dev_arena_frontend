@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useAuth } from "../Context/AuthContext";
 import { useParams } from "react-router-dom";
 import { useBattleSocket } from "../hook/useBattelHook";
-import { CodeEditor } from "./codeEditor";
+import { CodeEditor } from "./CodeEditor"
 import axios from "../api/axiosInstance";
 import { useAuth } from "../Context/AuthContext";
 
@@ -224,4 +224,4 @@ function BattlePage(){
     )
 }
 
-export default BattlePage
+export default BattlePage;
