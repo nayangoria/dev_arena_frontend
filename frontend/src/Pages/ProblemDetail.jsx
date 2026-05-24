@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import { useNavigate, useParams,useLocation } from "react-router-dom";
 import axios from "../api/axiosInstance";
-import { CodeEditor } from "./codeEditor";
+import { CodeEditor } from "./CodeEditor";
 // import { useAuth } from "../Context/AuthContext";
 function ProblemDetail(){
     const [loading,setloading]=useState(true);
