@@ -18,18 +18,12 @@ axiosInstance.interceptors.request.use(
 
 // This runs after every RESPONSE
 axiosInstance.interceptors.response.use(
-    // If response is ok — just return it
     (response) => response,
-
-    // If response has error
     (error) => {
-        if (error.response?.status === 401 ||
-            error.response?.status === 403) {
-            // Clear everything
+        // Only redirect on 401 Unauthorized — not 403
+        if (error.response?.status === 401) {
             localStorage.removeItem("token")
             localStorage.removeItem("user")
-
-            // Redirect to login with message
             window.location.href = "/login?expired=true"
         }
         return Promise.reject(error)
