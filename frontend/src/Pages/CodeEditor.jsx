@@ -5,18 +5,23 @@ import axios from "../api/axiosInstance";
 
 const starterCode = {
     javascript: `// Write your solution here
-function solution(input) {
-    // your code here
-    return result;
-}`,
+// Read input using: const lines = require('fs').readFileSync('/dev/stdin','utf8').split('\\n')
+
+`,
     python: `# Write your solution here
-def solution(input):
-    # your code here
-    return result`,
-    java: `// Write your solution here
+# Read input using: input()
+# Example:
+# t = int(input())
+# for _ in range(t):
+#     x = int(input())
+#     print(x)
+
+`,
+    java: `import java.util.Scanner;
 public class Solution {
     public static void main(String[] args) {
-        // your code here
+        Scanner sc = new Scanner(System.in);
+        // Write your solution here
     }
 }`
 }
