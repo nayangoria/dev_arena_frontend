@@ -11,7 +11,7 @@ function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
+    const [adminKey, setAdminKey] = useState("")
     const handleRegistration = async () => {
         setErrorMsg("");
 
@@ -34,10 +34,16 @@ function RegisterPage() {
 
         try {
             setLoading(true);
-            const response = await axios.post(
-                "/api/auth/register",
-                { name, email, password }
-            );
+            // const response = await axios.post(
+            //     "/api/auth/register",
+            //     { name, email, password }
+            // );
+
+            // to craete admin
+
+            const response = await axios.post("/api/auth/register", {
+                   name, email, password, adminSecretKey: adminKey
+                  })
             const data = response.data;
             login({ name: data.name, email: data.email }, data.token);
             navigate("/problems");
@@ -115,6 +121,14 @@ function RegisterPage() {
                         className="w-full border border-slate-200 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
                     />
                 </div>
+                {/* admin test purpose */}
+                <input
+                    type="text"
+                   value={adminKey}
+                   placeholder="Admin key (optional)"
+                   onChange={(e) => setAdminKey(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                   />
 
                 {/* Register button */}
                 <button
