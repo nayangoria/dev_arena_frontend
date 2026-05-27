@@ -106,7 +106,7 @@ function ProblemDetail(){
         
           {/* Code Editor */}
       <div className="mt-4 border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <CodeEditor />
+              <CodeEditor  problemId={problem.id}/>
         </div>
         </div>
      </div>

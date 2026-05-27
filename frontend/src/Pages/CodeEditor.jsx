@@ -26,7 +26,7 @@ public class Solution {
 }`
 }
 
-export function CodeEditor({onSubmit} ) {
+export function CodeEditor({onSubmit,problemId} ) {
     const [language, setLanguage] = useState("javascript")
     const [code, setCode] = useState(starterCode["javascript"])
     const [result, setResult] = useState(null)
@@ -53,16 +53,18 @@ export function CodeEditor({onSubmit} ) {
             })
         } else {
             // Practice mode - send through HTTP like before
-            const response = await axios.post(
-                "/api/submission/run",
-                {
-                    code: code,
-                    language: language.toUpperCase()
+            const endpoint = problemId 
+                 ? `/api/submission/run-with-tests/${problemId}`
+                : `/api/submission/run`;
+
+
+            const response = await axios.post(endpoint, {
+                code: code,
+                language: language.toUpperCase()
+                });
+               console.log(response.data)
+                setResult(response.data);
                 }
-            );
-            console.log(response.data)
-            setResult(response.data);
-        }
     } catch (error) {
         console.log("Error:", error)
         setResult({
