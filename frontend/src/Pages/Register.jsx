@@ -12,6 +12,7 @@ function RegisterPage() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [adminKey, setAdminKey] = useState("")
+    const [successMsg, setSuccessMsg] = useState("")
     const handleRegistration = async () => {
         setErrorMsg("");
 
@@ -46,7 +47,7 @@ function RegisterPage() {
                   })
             const data = response.data;
             login({ name: data.name, email: data.email }, data.token);
-            navigate("/problems");
+            setSuccessMsg("✅ Registration successful! Please check your email to verify your account before logging in.")
         } catch (err) {
             if (err.response?.status === 400) {
                 setErrorMsg("Email already in use");
@@ -71,7 +72,11 @@ function RegisterPage() {
                     </h1>
                     <p className="text-slate-400 mt-1 text-sm">Create your account and start battling</p>
                 </div>
-
+                {successMsg && (
+              <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg mb-6">
+                    {successMsg}
+                    </div>
+                  )}
                 {/* Error message */}
                 {errorMsg && (
                     <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg mb-6">
