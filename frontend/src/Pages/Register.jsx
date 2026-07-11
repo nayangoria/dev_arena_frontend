@@ -43,7 +43,7 @@ function RegisterPage() {
 
         if (data.token) {
             login({ name: data.name, email: data.email }, data.token);
-            navigate("/dashboard");
+            navigate("/admin/dashboard");
         } else {
             setSuccessMsg(data.message || "✅ Registration successful! Please check your email to verify your account before logging in.");
         }
