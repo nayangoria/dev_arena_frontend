@@ -13,6 +13,7 @@ import { LeaderBoard } from './Pages/LeaderBoard'
 import LandingPage from './Pages/LandinPage'
 import AdminLoginPage from './Pages/AdminLoginPage'
 import AdminDashboard from './Pages/AdminDashbord'
+import VerifyPage from './Pages/VerifyPage'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
 
             <Route path="/problems" element={
               <ProtectedRoute><ProblemPage /></ProtectedRoute>
