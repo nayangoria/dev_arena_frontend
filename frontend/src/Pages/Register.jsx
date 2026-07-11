@@ -14,51 +14,50 @@ function RegisterPage() {
     const [adminKey, setAdminKey] = useState("")
     const [successMsg, setSuccessMsg] = useState("")
     const handleRegistration = async () => {
-        setErrorMsg("");
+    setErrorMsg("");
+    setSuccessMsg("");
 
-        if (!name && !email && !password) {
-            setErrorMsg("All fields are empty");
-            return;
-        }
-        if (!name) {
-            setErrorMsg("Please enter your name");
-            return;
-        }
-        if (!email) {
-            setErrorMsg("Please enter your email");
-            return;
-        }
-        if (!password) {
-            setErrorMsg("Please enter your password");
-            return;
-        }
-
-        try {
-            setLoading(true);
-            // const response = await axios.post(
-            //     "/api/auth/register",
-            //     { name, email, password }
-            // );
-
-            // to craete admin
-
-            const response = await axios.post("/api/auth/register", {
-                   name, email, password, adminSecretKey: adminKey
-                  })
-            const data = response.data;
-            login({ name: data.name, email: data.email }, data.token);
-            setSuccessMsg("✅ Registration successful! Please check your email to verify your account before logging in.")
-        } catch (err) {
-            if (err.response?.status === 400) {
-                setErrorMsg("Email already in use");
-            } else {
-                setErrorMsg("Something went wrong. Try again.");
-            }
-            console.log(err);
-        } finally {
-            setLoading(false);
-        }
+    if (!name && !email && !password) {
+        setErrorMsg("All fields are empty");
+        return;
     }
+    if (!name) {
+        setErrorMsg("Please enter your name");
+        return;
+    }
+    if (!email) {
+        setErrorMsg("Please enter your email");
+        return;
+    }
+    if (!password) {
+        setErrorMsg("Please enter your password");
+        return;
+    }
+
+    try {
+        setLoading(true);
+        const response = await axios.post("/api/auth/register", {
+            name, email, password, adminSecretKey: adminKey
+        });
+        const data = response.data;
+
+        if (data.token) {
+            login({ name: data.name, email: data.email }, data.token);
+            navigate("/dashboard");
+        } else {
+            setSuccessMsg(data.message || "✅ Registration successful! Please check your email to verify your account before logging in.");
+        }
+    } catch (err) {
+        if (err.response?.status === 400) {
+            setErrorMsg("Email already in use");
+        } else {
+            setErrorMsg("Something went wrong. Try again.");
+        }
+        console.log(err);
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
