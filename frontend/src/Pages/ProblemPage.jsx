@@ -39,9 +39,8 @@ function ProblemPage() {
                 const response = await axios.get("/api/problems");
                 setProblems(response.data);
             } catch (error) {
-                setError("Failed to load problems");
-                setError(error)
-            } finally {
+                setError(error.response?.data?.message || error.response?.data?.error || "Failed to load problems");
+               } finally {
                 setLoading(false);
             }
         }
