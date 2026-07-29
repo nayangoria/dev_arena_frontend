@@ -25,7 +25,7 @@ function LandingPage() {
                         </button>
                         <button
                             onClick={() => navigate("/register")}
-                            className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md shadow-violet-200 transition-all duration-200 hover:shadow-lg hover:scale-[1.03] active:scale-95"
+                            className="bg-linear-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md shadow-violet-200 transition-all duration-200 hover:shadow-lg hover:scale-[1.03] active:scale-95"
                         >
                             Sign up
                         </button>
@@ -34,7 +34,7 @@ function LandingPage() {
             </nav>
 
             {/* ========== HERO ========== */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-700 text-white">
+            <div className="relative overflow-hidden bg-linear-to-br from-violet-600 via-indigo-600 to-blue-700 text-white">
                 {/* soft glow orbs */}
                 <div className="absolute -top-32 -left-32 w-96 h-96 bg-violet-400/30 rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
@@ -46,7 +46,7 @@ function LandingPage() {
 
                     <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
                         Code. Battle. <br />
-                        <span className="bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
+                        <span className="bg-linear-to-r from-yellow-300 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
                             Dominate.
                         </span>
                     </h1>
@@ -129,10 +129,10 @@ function LandingPage() {
                             className="group text-center bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-violet-100/50 transition-all duration-300 hover:-translate-y-1"
                         >
                             <div className="relative inline-block mb-6">
-                                <div className="w-20 h-20 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-2xl flex items-center justify-center text-4xl mx-auto shadow-inner group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-20 h-20 bg-linear-to-br from-violet-100 to-indigo-100 rounded-2xl flex items-center justify-center text-4xl mx-auto shadow-inner group-hover:scale-110 transition-transform duration-300">
                                     {item.icon}
                                 </div>
-                                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-full flex items-center justify-center shadow-md">
+                                <div className="absolute -top-2 -right-2 w-8 h-8 bg-linea from-violet-600 to-indigo-600 rounded-full flex items-center justify-center shadow-md">
                                     <span className="text-white text-xs font-bold">{item.step}</span>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@ function LandingPage() {
             </div>
 
             {/* ========== FEATURES ========== */}
-            <div className="bg-gradient-to-b from-slate-50 to-white py-28">
+            <div className="bg-linear-to-b from-slate-50 to-white py-28">
                 <div className="max-w-6xl mx-auto px-8">
                     <div className="text-center mb-20">
                         <h2 className="text-4xl md:text-5xl font-black text-slate-800 mb-4 tracking-tight">
@@ -196,7 +196,7 @@ function LandingPage() {
                         ].map((feature) => (
                             <div
                                 key={feature.title}
-                                className={`group bg-gradient-to-br ${feature.color} border rounded-3xl p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5`}
+                                className={`group bg-linear-to-br ${feature.color} border rounded-3xl p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5`}
                             >
                                 <span className="text-3xl mb-4 block group-hover:scale-110 transition-transform duration-300 origin-left">
                                     {feature.icon}
@@ -214,7 +214,7 @@ function LandingPage() {
             </div>
 
             {/* ========== CTA ========== */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 py-24">
+            <div className="relative overflow-hidden bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 py-24">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12),transparent_60%)]"></div>
                 
                 <div className="relative max-w-3xl mx-auto px-8 text-center">

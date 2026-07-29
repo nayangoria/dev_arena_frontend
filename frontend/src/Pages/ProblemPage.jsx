@@ -63,69 +63,87 @@ function ProblemPage() {
     );
 
     if (loading) return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-slate-500 font-medium">Loading problems...</p>
+        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-5">
+                <div className="w-14 h-14 border-[5px] border-violet-500 border-t-transparent rounded-full animate-spin shadow-lg shadow-violet-200"></div>
+                <p className="text-slate-500 font-medium tracking-wide">Loading problems...</p>
             </div>
         </div>
     )
 
     if (error) return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-            <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
-                <p className="text-red-500 font-semibold text-lg">{error}</p>
-                <p className="text-slate-400 mt-2">Make sure your backend is running</p>
+        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
+            <div className="bg-white border border-rose-200 rounded-3xl p-10 text-center shadow-xl shadow-rose-100/50 max-w-md">
+                <p className="text-rose-500 font-bold text-lg">{error}</p>
+                <p className="text-slate-400 mt-3 text-sm">Make sure your backend is running</p>
             </div>
         </div>
     )
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Header */}
-            <div className="bg-linear-to-r from-violet-600 to-indigo-600 px-8 py-12">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-3xl font-bold text-white mb-2">Practice Problems</h1>
-                    <p className="text-violet-200">Sharpen your skills, climb the leaderboard</p>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/40">
 
-                    {/* Stats */}
-                    <div className="flex gap-6 mt-6">
-                        <div className="bg-white/20 rounded-lg px-4 py-2">
-                            <p className="text-white font-bold text-xl">{problems.length}</p>
-                            <p className="text-violet-200 text-sm">Total</p>
+            {/* ========== HEADER ========== */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-700 px-8 py-14">
+                {/* soft glow */}
+                <div className="absolute -top-24 -right-24 w-80 h-80 bg-violet-400/25 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
+
+                <div className="relative max-w-4xl mx-auto">
+                    <h1 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
+                        Practice Problems
+                    </h1>
+                    <p className="text-violet-100/90 text-lg">
+                        Sharpen your skills, climb the leaderboard
+                    </p>
+
+                    {/* Stats pills */}
+                    <div className="flex flex-wrap gap-3 mt-8">
+                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
+                            <p className="text-white font-black text-2xl">{problems.length}</p>
+                            <p className="text-violet-200 text-xs font-medium mt-0.5">Total</p>
                         </div>
-                        <div className="bg-white/20 rounded-lg px-4 py-2">
-                            <p className="text-green-300 font-bold text-xl">{problems.filter(p => p.difficulty === "EASY").length}</p>
-                            <p className="text-violet-200 text-sm">Easy</p>
+                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
+                            <p className="text-emerald-300 font-black text-2xl">
+                                {problems.filter(p => p.difficulty === "EASY").length}
+                            </p>
+                            <p className="text-violet-200 text-xs font-medium mt-0.5">Easy</p>
                         </div>
-                        <div className="bg-white/20 rounded-lg px-4 py-2">
-                            <p className="text-yellow-300 font-bold text-xl">{problems.filter(p => p.difficulty === "MEDIUM").length}</p>
-                            <p className="text-violet-200 text-sm">Medium</p>
+                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
+                            <p className="text-amber-300 font-black text-2xl">
+                                {problems.filter(p => p.difficulty === "MEDIUM").length}
+                            </p>
+                            <p className="text-violet-200 text-xs font-medium mt-0.5">Medium</p>
                         </div>
-                        <div className="bg-white/20 rounded-lg px-4 py-2">
-                            <p className="text-red-300 font-bold text-xl">{problems.filter(p => p.difficulty === "HARD").length}</p>
-                            <p className="text-violet-200 text-sm">Hard</p>
+                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
+                            <p className="text-rose-300 font-black text-2xl">
+                                {problems.filter(p => p.difficulty === "HARD").length}
+                            </p>
+                            <p className="text-violet-200 text-xs font-medium mt-0.5">Hard</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-4xl mx-auto px-8 py-6">
+            {/* ========== CONTENT ========== */}
+            <div className="max-w-4xl mx-auto px-6 md:px-8 py-8">
 
-                {/* 🆕 CHANGE 7 — search input writes to URL */}
-                <input
-                    type="text"
-                    placeholder="Search by title or tag..."
-                    value={search}
-                    onChange={(e) => updateParams({
-                        search: e.target.value,
-                        page: "1" // reset to page 1 on new search
-                    })}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4"
-                />
+                {/* Search */}
+                <div className="relative mb-5">
+                    <input
+                        type="text"
+                        placeholder="Search by title or tag..."
+                        value={search}
+                        onChange={(e) => updateParams({
+                            search: e.target.value,
+                            page: "1" // reset to page 1 on new search
+                        })}
+                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-800 placeholder-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-400 transition-all duration-200"
+                    />
+                </div>
 
-                {/* 🆕 CHANGE 8 — filter buttons write to URL */}
-                <div className="flex gap-3 mb-6">
+                {/* Filter buttons */}
+                <div className="flex flex-wrap gap-2.5 mb-7">
                     {["ALL", "EASY", "MEDIUM", "HARD"].map(level => (
                         <button
                             key={level}
@@ -133,109 +151,117 @@ function ProblemPage() {
                                 difficulty: level === "ALL" ? null : level,
                                 page: "1" // reset to page 1 on filter change
                             })}
-                            className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
-                                ${filter === level
-                                    ? "bg-violet-600 text-white shadow-md"
-                                    : "bg-white text-slate-600 border border-slate-200 hover:border-violet-300"
-                                }`}
+                            className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 ${
+                                filter === level
+                                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-200 scale-[1.02]"
+                                    : "bg-white text-slate-600 border border-slate-200 hover:border-violet-300 hover:text-violet-700 hover:shadow-sm"
+                            }`}
                         >
                             {level}
                         </button>
                     ))}
                 </div>
 
-                {/* Problem count */}
-                <p className="text-slate-400 text-sm mb-4">
-                    Showing {paginated.length} of {filtered.length} problems
-                    {filter !== "ALL" && ` (filtered: ${filter})`}
-                    {search && ` (search: "${search}")`}
+                {/* Result count */}
+                <p className="text-slate-500 text-sm mb-5 font-medium">
+                    Showing <span className="text-violet-600 font-bold">{paginated.length}</span> of{" "}
+                    <span className="text-slate-700 font-bold">{filtered.length}</span> problems
+                    {filter !== "ALL" && (
+                        <span className="ml-1.5 text-xs bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-full font-semibold">
+                            {filter}
+                        </span>
+                    )}
+                    {search && (
+                        <span className="ml-1.5 text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full">
+                            “{search}”
+                        </span>
+                    )}
                 </p>
 
                 {/* Problem list */}
                 {paginated.length === 0 ? (
-                    <div className="text-center py-16">
-                        <p className="text-slate-400 text-lg">No problems found</p>
-                        {/* 🆕 CHANGE 9 — clear filters button */}
+                    <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <p className="text-slate-400 text-lg font-medium">No problems found</p>
                         <button
                             onClick={() => setSearchParams({})}
-                            className="mt-4 text-violet-600 hover:underline text-sm"
+                            className="mt-4 inline-flex items-center gap-1.5 text-violet-600 hover:text-violet-700 font-semibold text-sm transition-colors"
                         >
                             Clear all filters
                         </button>
                     </div>
                 ) : (
-                    paginated.map((problem, index) => (
-                        <ProblemCard
-                            key={problem.id}
-                            problem={problem}
-                            // 🆕 CHANGE 10 — global index not page index
-                            index={(page - 1) * PROBLEMS_PER_PAGE + index + 1}
-                        />
-                    ))
-                )}
-
-                {/* 🆕 CHANGE 11 — Pagination controls */}
-                {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-8">
-
-                        {/* Previous button */}
-                        <button
-                            onClick={() => updateParams({ page: String(page - 1) })}
-                            disabled={page === 1}
-                            className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-violet-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                        >
-                            ← Prev
-                        </button>
-
-                        {/* Page numbers */}
-                        {Array.from({ length: totalPages }, (_, i) => i + 1)
-                            .filter(p =>
-                                p === 1 ||
-                                p === totalPages ||
-                                Math.abs(p - page) <= 2
-                            )
-                            .reduce((acc, p, i, arr) => {
-                                if (i > 0 && p - arr[i - 1] > 1) {
-                                    acc.push("...");
-                                }
-                                acc.push(p);
-                                return acc;
-                            }, [])
-                            .map((p, i) => (
-                                p === "..." ? (
-                                    <span key={`dots-${i}`} className="px-2 text-slate-400">...</span>
-                                ) : (
-                                    <button
-                                        key={p}
-                                        onClick={() => updateParams({ page: String(p) })}
-                                        className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
-                                            page === p
-                                                ? "bg-violet-600 text-white"
-                                                : "border border-slate-200 text-slate-600 hover:border-violet-300"
-                                        }`}
-                                    >
-                                        {p}
-                                    </button>
-                                )
-                            ))
-                        }
-
-                        {/* Next button */}
-                        <button
-                            onClick={() => updateParams({ page: String(page + 1) })}
-                            disabled={page === totalPages}
-                            className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-violet-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                        >
-                            Next →
-                        </button>
+                    <div className="space-y-3">
+                        {paginated.map((problem, index) => (
+                            <ProblemCard
+                                key={problem.id}
+                                problem={problem}
+                                // 🆕 CHANGE 10 — global index not page index
+                                index={(page - 1) * PROBLEMS_PER_PAGE + index + 1}
+                            />
+                        ))}
                     </div>
                 )}
 
-                {/* Page info */}
+                {/* Pagination */}
                 {totalPages > 1 && (
-                    <p className="text-center text-slate-400 text-sm mt-3">
-                        Page {page} of {totalPages}
-                    </p>
+                    <div className="mt-10 flex flex-col items-center gap-4">
+                        <div className="flex items-center justify-center gap-2">
+                            {/* Previous */}
+                            <button
+                                onClick={() => updateParams({ page: String(page - 1) })}
+                                disabled={page === 1}
+                                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-sm hover:border-violet-300 hover:text-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                            >
+                                ← Prev
+                            </button>
+
+                            {/* Page numbers */}
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(p =>
+                                    p === 1 ||
+                                    p === totalPages ||
+                                    Math.abs(p - page) <= 2
+                                )
+                                .reduce((acc, p, i, arr) => {
+                                    if (i > 0 && p - arr[i - 1] > 1) {
+                                        acc.push("...");
+                                    }
+                                    acc.push(p);
+                                    return acc;
+                                }, [])
+                                .map((p, i) => (
+                                    p === "..." ? (
+                                        <span key={`dots-${i}`} className="px-2 text-slate-400 font-medium">...</span>
+                                    ) : (
+                                        <button
+                                            key={p}
+                                            onClick={() => updateParams({ page: String(p) })}
+                                            className={`w-10 h-10 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                                                page === p
+                                                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-200"
+                                                    : "bg-white border border-slate-200 text-slate-600 hover:border-violet-300 hover:text-violet-700 shadow-sm"
+                                            }`}
+                                        >
+                                            {p}
+                                        </button>
+                                    )
+                                ))
+                            }
+
+                            {/* Next */}
+                            <button
+                                onClick={() => updateParams({ page: String(page + 1) })}
+                                disabled={page === totalPages}
+                                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-sm hover:border-violet-300 hover:text-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                            >
+                                Next →
+                            </button>
+                        </div>
+
+                        <p className="text-slate-400 text-sm font-medium">
+                            Page <span className="text-violet-600 font-bold">{page}</span> of {totalPages}
+                        </p>
+                    </div>
                 )}
             </div>
         </div>

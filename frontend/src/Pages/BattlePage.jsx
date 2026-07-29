@@ -74,7 +74,7 @@ function BattlePage(){
     // const iLost = battleOver && !iWon
 
     if (loading) return (
-        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
+        <div className="min-h-screen bg-linear-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
             <div className="flex flex-col items-center gap-5">
                 <div className="w-14 h-14 border-[5px] border-violet-500 border-t-transparent rounded-full animate-spin shadow-lg shadow-violet-200"></div>
                 <p className="text-slate-500 font-medium tracking-wide">Loading battle room...</p>
@@ -83,7 +83,7 @@ function BattlePage(){
     )
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/40 to-indigo-50 flex flex-col">
+        <div className="min-h-screen bg-linear-to-br from-slate-50 via-violet-50/40 to-indigo-50 flex flex-col">
 
             {/* Opponent submission popup notification */}
             {notification && (
@@ -105,8 +105,8 @@ function BattlePage(){
             {battleOver && (
                 <div className={`w-full py-5 text-center border-b-2 shadow-sm ${
                     iWon
-                        ? "bg-gradient-to-r from-emerald-400 to-green-500 text-white border-emerald-300"
-                        : "bg-gradient-to-r from-rose-400 to-red-500 text-white border-rose-300"
+                        ? "bg-linear-to-r from-emerald-400 to-green-500 text-white border-emerald-300"
+                        : "bg-linear-to-r from-rose-400 to-red-500 text-white border-rose-300"
                 }`}>
                     <p className="font-bold text-xl tracking-wide">
                         {iWon
@@ -137,7 +137,7 @@ function BattlePage(){
                     {/* Properly aligned Verdict button */}
                     <button 
                         onClick={() => navigate(`/battle/verdict/${roomCode}`)}
-                        className="ml-1 inline-flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-md shadow-violet-200 transition-all duration-200 hover:shadow-lg hover:scale-[1.03] active:scale-95"
+                        className="ml-1 inline-flex items-center gap-1.5 bg-linear-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-md shadow-violet-200 transition-all duration-200 hover:shadow-lg hover:scale-[1.03] active:scale-95"
                     >
                         📊 Verdict
                     </button>
