@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import './App.css'
 import ProblemPage from './Pages/ProblemPage'
 import Navbar from './Component/Navbar'
@@ -14,19 +14,33 @@ import LandingPage from './Pages/LandinPage'
 import AdminLoginPage from './Pages/AdminLoginPage'
 import AdminDashboard from './Pages/AdminDashbord'
 import VerifyPage from './Pages/VerifyPage'
+import VerdictDashboard from './Pages/VerdictDashBoard'
+
+function MainLayout(){
+  return(
+    <>
+    <Navbar/>
+    <Outlet/>
+    </>
+  )
+}
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <div className="min-h-screen bg-slate-50">
-          <Navbar />
+        
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/verify" element={<VerifyPage />} />
+
+            <Route element={<MainLayout/>}>
+            <Route path="/battle/verdict/:roomCode" 
+            element={<ProtectedRoute><VerdictDashboard/></ProtectedRoute>}/>
 
             <Route path="/problems" element={
               <ProtectedRoute><ProblemPage /></ProtectedRoute>
@@ -46,6 +60,7 @@ function App() {
             <Route path="/admin/dashboard" element={
               <ProtectedRoute><AdminDashboard /></ProtectedRoute>
             } />
+            </Route>
           </Routes>
         </div>
       </AuthProvider>
