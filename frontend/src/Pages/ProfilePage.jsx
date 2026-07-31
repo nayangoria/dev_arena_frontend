@@ -4,7 +4,7 @@ import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
 import { BattleCard } from "../Component/BattleCard";
 import { useNavigate } from "react-router-dom";
-import Statcard from "../Component/StatCard";
+import Statcard from "../Component/Statcard";
 
 const AI_JUDGE_API = import.meta.env.VITE_AI_JUDGE_URL;
 
