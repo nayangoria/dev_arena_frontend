@@ -1,4 +1,4 @@
-export default function StatCard({ label, value, sub, icon }) {
+export default function Statcard({ label, value, sub, icon }) {
   return (
     <div style={{
       background: "#1E1535", borderRadius: 12,

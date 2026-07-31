@@ -4,7 +4,7 @@ import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
 import { BattleCard } from "../Component/BattleCard";
 import { useNavigate } from "react-router-dom";
-import StatCard from "../Component/StatCard";
+import Statcard from "../Component/StatCard";
 
 const AI_JUDGE_API = import.meta.env.VITE_AI_JUDGE_URL;
 
@@ -313,10 +313,10 @@ export default function ProfilePage() {
 
         {/* Stat cards */}
         <div className="flex flex-wrap gap-3.5 mb-7">
-          <StatCard icon="⚔️" label="Total Battles" value={totalBattles} sub="FINISHED rooms" />
-          <StatCard icon="🤖" label="AI Analyses" value={analyzedCount} sub={`of ${totalBattles} battles`} />
-          <StatCard icon="🏆" label="Algo Wins" value={algoWins} sub="better algorithm" />
-          <StatCard icon="📊" label="Most Used TC" value={avgTC} sub="your avg complexity" />
+          <Statcard icon="⚔️" label="Total Battles" value={totalBattles} sub="FINISHED rooms" />
+          <Statcard icon="🤖" label="AI Analyses" value={analyzedCount} sub={`of ${totalBattles} battles`} />
+          <Statcard icon="🏆" label="Algo Wins" value={algoWins} sub="better algorithm" />
+          <Statcard icon="📊" label="Most Used TC" value={avgTC} sub="your avg complexity" />
         </div>
 
         {/* Battle history */}
