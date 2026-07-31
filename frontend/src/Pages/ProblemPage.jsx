@@ -1,271 +1,369 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axiosInstance";
 import ProblemCard from "../Component/ProblemCard";
-// 🆕 CHANGE 1 — import useSearchParams to read/write URL params
 import { useSearchParams } from "react-router-dom";
 
-const PROBLEMS_PER_PAGE = 20; // 🆕 CHANGE 2 — page size constant
+const PROBLEMS_PER_PAGE = 20;
 
 function ProblemPage() {
-    const [loading, setLoading] = useState(true);
-    const [problems, setProblems] = useState([]);
-    const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [problems, setProblems] = useState([]);
+  const [error, setError] = useState(null);
 
-    // 🆕 CHANGE 3 — read filter and page FROM URL instead of useState
-    const [searchParams, setSearchParams] = useSearchParams();
-    const filter = searchParams.get("difficulty") || "ALL";
-    const page = parseInt(searchParams.get("page") || "1");
-    const search = searchParams.get("search") || "";
-    // const [error,setError]=useState("")
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filter = searchParams.get("difficulty") || "ALL";
+  const page = parseInt(searchParams.get("page") || "1");
+  const search = searchParams.get("search") || "";
 
-    // 🆕 CHANGE 4 — helper to update URL params without losing others
-    const updateParams = (newParams) => {
-        setSearchParams(prev => {
-            const updated = new URLSearchParams(prev);
-            Object.entries(newParams).forEach(([key, value]) => {
-                if (value === null || value === "") {
-                    updated.delete(key);
-                } else {
-                    updated.set(key, value);
-                }
-            });
-            return updated;
-        });
-    };
-
-    useEffect(() => {
-        async function getProblems() {
-            try {
-                const response = await axios.get("/api/problems");
-                setProblems(response.data);
-            } catch (error) {
-                setError(error.response?.data?.message || error.response?.data?.error || "Failed to load problems");
-               } finally {
-                setLoading(false);
-            }
+  const updateParams = (newParams) => {
+    setSearchParams((prev) => {
+      const updated = new URLSearchParams(prev);
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value === null || value === "") {
+          updated.delete(key);
+        } else {
+          updated.set(key, value);
         }
-        getProblems();
-    }, [])
+      });
+      return updated;
+    });
+  };
 
-    // 🆕 CHANGE 5 — filter and search logic same but reads from URL now
-    const filtered = problems
-        .filter(p => filter === "ALL" || p.difficulty === filter)
-        .filter(p => search === "" ||
-            p.title.toLowerCase().includes(search.toLowerCase()) ||
-            (p.tags && p.tags.toLowerCase().includes(search.toLowerCase()))
+  useEffect(() => {
+    async function getProblems() {
+      try {
+        const response = await axios.get("/api/problems");
+        setProblems(response.data);
+      } catch (error) {
+        setError(
+          error.response?.data?.message ||
+            error.response?.data?.error ||
+            "Failed to load problems"
         );
+      } finally {
+        setLoading(false);
+      }
+    }
+    getProblems();
+  }, []);
 
-    // 🆕 CHANGE 6 — pagination logic
-    const totalPages = Math.ceil(filtered.length / PROBLEMS_PER_PAGE);
-    const paginated = filtered.slice(
-        (page - 1) * PROBLEMS_PER_PAGE,
-        page * PROBLEMS_PER_PAGE
+  const filtered = problems
+    .filter((p) => filter === "ALL" || p.difficulty === filter)
+    .filter(
+      (p) =>
+        search === "" ||
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        (p.tags && p.tags.toLowerCase().includes(search.toLowerCase()))
     );
 
-    if (loading) return (
-        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-5">
-                <div className="w-14 h-14 border-[5px] border-violet-500 border-t-transparent rounded-full animate-spin shadow-lg shadow-violet-200"></div>
-                <p className="text-slate-500 font-medium tracking-wide">Loading problems...</p>
-            </div>
-        </div>
-    )
+  const totalPages = Math.ceil(filtered.length / PROBLEMS_PER_PAGE);
+  const paginated = filtered.slice(
+    (page - 1) * PROBLEMS_PER_PAGE,
+    page * PROBLEMS_PER_PAGE
+  );
 
-    if (error) return (
-        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center">
-            <div className="bg-white border border-rose-200 rounded-3xl p-10 text-center shadow-xl shadow-rose-100/50 max-w-md">
-                <p className="text-rose-500 font-bold text-lg">{error}</p>
-                <p className="text-slate-400 mt-3 text-sm">Make sure your backend is running</p>
-            </div>
-        </div>
-    )
-
+  /* ---------- LOADING ---------- */
+  if (loading)
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/40">
-
-            {/* ========== HEADER ========== */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-700 px-8 py-14">
-                {/* soft glow */}
-                <div className="absolute -top-24 -right-24 w-80 h-80 bg-violet-400/25 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
-
-                <div className="relative max-w-4xl mx-auto">
-                    <h1 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
-                        Practice Problems
-                    </h1>
-                    <p className="text-violet-100/90 text-lg">
-                        Sharpen your skills, climb the leaderboard
-                    </p>
-
-                    {/* Stats pills */}
-                    <div className="flex flex-wrap gap-3 mt-8">
-                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
-                            <p className="text-white font-black text-2xl">{problems.length}</p>
-                            <p className="text-violet-200 text-xs font-medium mt-0.5">Total</p>
-                        </div>
-                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
-                            <p className="text-emerald-300 font-black text-2xl">
-                                {problems.filter(p => p.difficulty === "EASY").length}
-                            </p>
-                            <p className="text-violet-200 text-xs font-medium mt-0.5">Easy</p>
-                        </div>
-                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
-                            <p className="text-amber-300 font-black text-2xl">
-                                {problems.filter(p => p.difficulty === "MEDIUM").length}
-                            </p>
-                            <p className="text-violet-200 text-xs font-medium mt-0.5">Medium</p>
-                        </div>
-                        <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 shadow-lg">
-                            <p className="text-rose-300 font-black text-2xl">
-                                {problems.filter(p => p.difficulty === "HARD").length}
-                            </p>
-                            <p className="text-violet-200 text-xs font-medium mt-0.5">Hard</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* ========== CONTENT ========== */}
-            <div className="max-w-4xl mx-auto px-6 md:px-8 py-8">
-
-                {/* Search */}
-                <div className="relative mb-5">
-                    <input
-                        type="text"
-                        placeholder="Search by title or tag..."
-                        value={search}
-                        onChange={(e) => updateParams({
-                            search: e.target.value,
-                            page: "1" // reset to page 1 on new search
-                        })}
-                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-800 placeholder-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-400 transition-all duration-200"
-                    />
-                </div>
-
-                {/* Filter buttons */}
-                <div className="flex flex-wrap gap-2.5 mb-7">
-                    {["ALL", "EASY", "MEDIUM", "HARD"].map(level => (
-                        <button
-                            key={level}
-                            onClick={() => updateParams({
-                                difficulty: level === "ALL" ? null : level,
-                                page: "1" // reset to page 1 on filter change
-                            })}
-                            className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 ${
-                                filter === level
-                                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-200 scale-[1.02]"
-                                    : "bg-white text-slate-600 border border-slate-200 hover:border-violet-300 hover:text-violet-700 hover:shadow-sm"
-                            }`}
-                        >
-                            {level}
-                        </button>
-                    ))}
-                </div>
-
-                {/* Result count */}
-                <p className="text-slate-500 text-sm mb-5 font-medium">
-                    Showing <span className="text-violet-600 font-bold">{paginated.length}</span> of{" "}
-                    <span className="text-slate-700 font-bold">{filtered.length}</span> problems
-                    {filter !== "ALL" && (
-                        <span className="ml-1.5 text-xs bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-full font-semibold">
-                            {filter}
-                        </span>
-                    )}
-                    {search && (
-                        <span className="ml-1.5 text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full">
-                            “{search}”
-                        </span>
-                    )}
-                </p>
-
-                {/* Problem list */}
-                {paginated.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                        <p className="text-slate-400 text-lg font-medium">No problems found</p>
-                        <button
-                            onClick={() => setSearchParams({})}
-                            className="mt-4 inline-flex items-center gap-1.5 text-violet-600 hover:text-violet-700 font-semibold text-sm transition-colors"
-                        >
-                            Clear all filters
-                        </button>
-                    </div>
-                ) : (
-                    <div className="space-y-3">
-                        {paginated.map((problem, index) => (
-                            <ProblemCard
-                                key={problem.id}
-                                problem={problem}
-                                // 🆕 CHANGE 10 — global index not page index
-                                index={(page - 1) * PROBLEMS_PER_PAGE + index + 1}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                    <div className="mt-10 flex flex-col items-center gap-4">
-                        <div className="flex items-center justify-center gap-2">
-                            {/* Previous */}
-                            <button
-                                onClick={() => updateParams({ page: String(page - 1) })}
-                                disabled={page === 1}
-                                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-sm hover:border-violet-300 hover:text-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                            >
-                                ← Prev
-                            </button>
-
-                            {/* Page numbers */}
-                            {Array.from({ length: totalPages }, (_, i) => i + 1)
-                                .filter(p =>
-                                    p === 1 ||
-                                    p === totalPages ||
-                                    Math.abs(p - page) <= 2
-                                )
-                                .reduce((acc, p, i, arr) => {
-                                    if (i > 0 && p - arr[i - 1] > 1) {
-                                        acc.push("...");
-                                    }
-                                    acc.push(p);
-                                    return acc;
-                                }, [])
-                                .map((p, i) => (
-                                    p === "..." ? (
-                                        <span key={`dots-${i}`} className="px-2 text-slate-400 font-medium">...</span>
-                                    ) : (
-                                        <button
-                                            key={p}
-                                            onClick={() => updateParams({ page: String(p) })}
-                                            className={`w-10 h-10 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                                                page === p
-                                                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-200"
-                                                    : "bg-white border border-slate-200 text-slate-600 hover:border-violet-300 hover:text-violet-700 shadow-sm"
-                                            }`}
-                                        >
-                                            {p}
-                                        </button>
-                                    )
-                                ))
-                            }
-
-                            {/* Next */}
-                            <button
-                                onClick={() => updateParams({ page: String(page + 1) })}
-                                disabled={page === totalPages}
-                                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-sm hover:border-violet-300 hover:text-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                            >
-                                Next →
-                            </button>
-                        </div>
-
-                        <p className="text-slate-400 text-sm font-medium">
-                            Page <span className="text-violet-600 font-bold">{page}</span> of {totalPages}
-                        </p>
-                    </div>
-                )}
-            </div>
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
+                      dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
+                      flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
+          <div className="w-14 h-14 border-[5px] border-teal-500 border-t-transparent rounded-full 
+                          animate-spin shadow-lg shadow-teal-200 dark:shadow-teal-900/40" />
+          <p className="text-slate-500 dark:text-slate-400 font-medium tracking-wide">
+            Loading problems...
+          </p>
         </div>
-    )
+      </div>
+    );
+
+  /* ---------- ERROR ---------- */
+  if (error)
+    return (
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
+                      dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
+                      flex items-center justify-center px-4">
+        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl 
+                        border border-rose-200 dark:border-rose-800/50 
+                        rounded-3xl p-8 sm:p-10 text-center 
+                        shadow-xl shadow-rose-100/40 dark:shadow-rose-950/30 max-w-md w-full">
+          <p className="text-rose-500 dark:text-rose-400 font-bold text-lg">{error}</p>
+          <p className="text-slate-400 dark:text-slate-500 mt-3 text-sm">
+            Make sure your backend is running
+          </p>
+        </div>
+      </div>
+    );
+
+  return (
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/20 to-emerald-50/30 
+                    dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
+
+      {/* ========== HEADER ========== */}
+      <div className="relative overflow-hidden 
+                      bg-linear-to-br from-teal-600 via-emerald-600 to-cyan-600 
+                      dark:from-teal-900 dark:via-emerald-900 dark:to-cyan-950
+                      px-5 sm:px-8 py-10 sm:py-14">
+        {/* liquid glows */}
+        <div className="absolute -top-24 -right-24 w-72 sm:w-80 h-72 sm:h-80 
+                        bg-cyan-400/30 dark:bg-cyan-500/15 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-64 sm:w-72 h-64 sm:h-72 
+                        bg-emerald-400/25 dark:bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                        w-96 h-40 bg-white/5 rounded-full blur-3xl" />
+
+        <div className="relative max-w-4xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
+            Practice Problems
+          </h1>
+          <p className="text-teal-100/90 dark:text-teal-200/80 text-base sm:text-lg">
+            Sharpen your skills, climb the leaderboard
+          </p>
+
+          {/* Stats pills */}
+          <div className="flex flex-wrap gap-2.5 sm:gap-3 mt-6 sm:mt-8">
+            {[
+              { label: "Total", value: problems.length, accent: "text-white" },
+              {
+                label: "Easy",
+                value: problems.filter((p) => p.difficulty === "EASY").length,
+                accent: "text-emerald-300",
+              },
+              {
+                label: "Medium",
+                value: problems.filter((p) => p.difficulty === "MEDIUM").length,
+                accent: "text-amber-300",
+              },
+              {
+                label: "Hard",
+                value: problems.filter((p) => p.difficulty === "HARD").length,
+                accent: "text-rose-300",
+              },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-white/15 dark:bg-white/10 backdrop-blur-md 
+                           border border-white/20 dark:border-white/10 
+                           rounded-2xl px-4 sm:px-5 py-2.5 sm:py-3 
+                           shadow-lg shadow-black/5"
+              >
+                <p className={`font-black text-xl sm:text-2xl ${stat.accent}`}>
+                  {stat.value}
+                </p>
+                <p className="text-teal-100/80 dark:text-teal-200/60 text-[10px] sm:text-xs font-medium mt-0.5">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ========== CONTENT ========== */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+
+        {/* Search – glass */}
+        <div className="relative mb-5">
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <svg className="w-5 h-5 text-teal-400 dark:text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search by title or tag..."
+            value={search}
+            onChange={(e) =>
+              updateParams({ search: e.target.value, page: "1" })
+            }
+            className="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl
+                       border border-teal-200/60 dark:border-teal-800/40
+                       rounded-2xl pl-12 pr-5 py-3.5 
+                       text-slate-800 dark:text-slate-100 
+                       placeholder-slate-400 dark:placeholder-slate-500
+                       shadow-sm shadow-teal-100/30 dark:shadow-teal-950/20
+                       focus:outline-none focus:ring-2 focus:ring-teal-500/40 
+                       focus:border-teal-400 dark:focus:border-teal-600
+                       transition-all duration-200"
+          />
+        </div>
+
+        {/* Filter buttons */}
+        <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-6 sm:mb-7">
+          {[
+            { level: "ALL", active: "from-teal-500 to-emerald-500 shadow-teal-200 dark:shadow-teal-900/40" },
+            { level: "EASY", active: "from-emerald-500 to-green-500 shadow-emerald-200 dark:shadow-emerald-900/40" },
+            { level: "MEDIUM", active: "from-amber-500 to-orange-500 shadow-amber-200 dark:shadow-amber-900/40" },
+            { level: "HARD", active: "from-rose-500 to-red-500 shadow-rose-200 dark:shadow-rose-900/40" },
+          ].map(({ level, active }) => (
+            <button
+              key={level}
+              onClick={() =>
+                updateParams({
+                  difficulty: level === "ALL" ? null : level,
+                  page: "1",
+                })
+              }
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm 
+                          transition-all duration-200 ${
+                filter === level
+                  ? `bg-linear-to-r ${active} text-white shadow-md scale-[1.03]`
+                  : `bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm
+                     text-slate-600 dark:text-slate-300 
+                     border border-slate-200/80 dark:border-slate-700/60
+                     hover:border-teal-300 dark:hover:border-teal-600
+                     hover:text-teal-700 dark:hover:text-teal-300
+                     hover:shadow-sm`
+              }`}
+            >
+              {level}
+            </button>
+          ))}
+        </div>
+
+        {/* Result count */}
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-5 font-medium flex flex-wrap items-center gap-1.5">
+          Showing{" "}
+          <span className="text-teal-600 dark:text-teal-400 font-bold">
+            {paginated.length}
+          </span>{" "}
+          of{" "}
+          <span className="text-slate-700 dark:text-slate-200 font-bold">
+            {filtered.length}
+          </span>{" "}
+          problems
+          {filter !== "ALL" && (
+            <span
+              className={`ml-1 text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                filter === "EASY"
+                  ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"
+                  : filter === "MEDIUM"
+                  ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
+                  : "bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300"
+              }`}
+            >
+              {filter}
+            </span>
+          )}
+          {search && (
+            <span className="text-xs bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 px-2.5 py-0.5 rounded-full">
+              “{search}”
+            </span>
+          )}
+        </p>
+
+        {/* Problem list */}
+        {paginated.length === 0 ? (
+          <div className="text-center py-16 sm:py-20 
+                          bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl
+                          rounded-3xl border border-slate-200/60 dark:border-slate-700/50 
+                          shadow-sm">
+            <p className="text-slate-400 dark:text-slate-500 text-lg font-medium">
+              No problems found
+            </p>
+            <button
+              onClick={() => setSearchParams({})}
+              className="mt-4 inline-flex items-center gap-1.5 
+                         text-teal-600 dark:text-teal-400 
+                         hover:text-teal-700 dark:hover:text-teal-300 
+                         font-semibold text-sm transition-colors"
+            >
+              Clear all filters
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {paginated.map((problem, index) => (
+              <ProblemCard
+                key={problem.id}
+                problem={problem}
+                index={(page - 1) * PROBLEMS_PER_PAGE + index + 1}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 sm:mt-10 flex flex-col items-center gap-4">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+              <button
+                onClick={() => updateParams({ page: String(page - 1) })}
+                disabled={page === 1}
+                className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl 
+                           bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm
+                           border border-slate-200/80 dark:border-slate-700/60
+                           text-slate-600 dark:text-slate-300 font-medium text-sm
+                           hover:border-teal-400 dark:hover:border-teal-600
+                           hover:text-teal-700 dark:hover:text-teal-300
+                           disabled:opacity-40 disabled:cursor-not-allowed 
+                           transition-all duration-200 shadow-sm"
+              >
+                ← Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(
+                  (p) =>
+                    p === 1 || p === totalPages || Math.abs(p - page) <= 2
+                )
+                .reduce((acc, p, i, arr) => {
+                  if (i > 0 && p - arr[i - 1] > 1) acc.push("...");
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((p, i) =>
+                  p === "..." ? (
+                    <span
+                      key={`dots-${i}`}
+                      className="px-1.5 text-slate-400 dark:text-slate-500 font-medium"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => updateParams({ page: String(p) })}
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                        page === p
+                          ? "bg-linear-to-r from-teal-500 to-emerald-500 text-white shadow-md shadow-teal-200 dark:shadow-teal-900/40 scale-105"
+                          : "bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:border-teal-400 dark:hover:border-teal-600 hover:text-teal-700 dark:hover:text-teal-300 shadow-sm"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+              <button
+                onClick={() => updateParams({ page: String(page + 1) })}
+                disabled={page === totalPages}
+                className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl 
+                           bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm
+                           border border-slate-200/80 dark:border-slate-700/60
+                           text-slate-600 dark:text-slate-300 font-medium text-sm
+                           hover:border-teal-400 dark:hover:border-teal-600
+                           hover:text-teal-700 dark:hover:text-teal-300
+                           disabled:opacity-40 disabled:cursor-not-allowed 
+                           transition-all duration-200 shadow-sm"
+              >
+                Next →
+              </button>
+            </div>
+
+            <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">
+              Page{" "}
+              <span className="text-teal-600 dark:text-teal-400 font-bold">
+                {page}
+              </span>{" "}
+              of {totalPages}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default ProblemPage;

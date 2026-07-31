@@ -1,127 +1,184 @@
-import { useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import axios from "../api/axiosInstance";
-import { useSearchParams } from "react-router-dom"
-function LoginPage(){
-    const [searchParams] = useSearchParams()
-    const sessionExpired = searchParams.get("expired")
- 
-    const navigate=useNavigate();
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-    const {login}=useAuth();
-    const [errormsg,seterrormsg]=useState("")
- 
-    const [loading,setloading]=useState(false)
-    
-    const handleLogin=async()=>{
-        seterrormsg("")
-        if(!email && !password){
-            seterrormsg("Please enter email and password")
-            return
-        }
-         if(!email){
-            seterrormsg("Please enter email")
-            return 
-        }
-        if(!password){
-            seterrormsg("Please enter password")
-            return
-        }
-         try{
-                setloading(true)
-                const response =await axios.post("/api/auth/login",{email,password});
-                const data=response.data
-                login({email:data.email,name:data.name},data.token)
-                navigate("/problems")
-                
-            }catch(error){
-                seterrormsg("Unable to Login  INVALID PASSWORD OR EMAIL" ,error)
-                console.log(error)
-            }
-            finally{
-                setloading(false);
-            }      
 
+function LoginPage() {
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get("expired");
+
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setErrorMsg("");
+    if (!email && !password) {
+      setErrorMsg("Please enter email and password");
+      return;
     }
+    if (!email) {
+      setErrorMsg("Please enter email");
+      return;
+    }
+    if (!password) {
+      setErrorMsg("Please enter password");
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/auth/login", { email, password });
+      const data = response.data;
+      login({ email: data.email, name: data.name }, data.token);
+      navigate("/problems");
+    } catch (error) {
+      setErrorMsg("Unable to login — invalid email or password");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  return (
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/40 to-emerald-50/30 
+                    dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
+                    flex items-center justify-center px-4 py-10
+                    transition-colors duration-300">
 
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 w-full max-w-md p-8">
-                {sessionExpired && (
-                  <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm px-4 py-3 rounded-lg mb-6">
-                  ⏰ Your session expired. Please login again.
-           </div>
-         )}
+      {/* soft background orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-20 w-72 h-72 bg-teal-400/10 dark:bg-teal-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-emerald-400/10 dark:bg-emerald-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-40 bg-cyan-400/5 rounded-full blur-3xl" />
+      </div>
 
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <span className="text-4xl">⚔️</span>
-                    <h1 className="text-2xl font-bold text-slate-800 mt-3">
-                        Welcome back to <span className="text-violet-600">DevArena</span>
-                    </h1>
-                    <p className="text-slate-400 mt-1 text-sm">Sign in to continue your journey</p>
-                </div>
+      <div className="relative w-full max-w-md
+                      bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl
+                      border border-teal-200/50 dark:border-teal-800/40
+                      rounded-3xl shadow-xl shadow-teal-100/30 dark:shadow-teal-950/20
+                      p-6 sm:p-8">
 
-                {/* Error message */}
-                {errormsg && (
-                    <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg mb-6">
-                        {errormsg}
-                    </div>
-                )}
+        {/* Session expired */}
+        {sessionExpired && (
+          <div className="bg-amber-50/90 dark:bg-amber-950/40 backdrop-blur-sm
+                          border border-amber-200 dark:border-amber-800/50 
+                          text-amber-700 dark:text-amber-300 text-sm 
+                          px-4 py-3 rounded-2xl mb-6 font-medium text-center">
+            ⏰ Your session expired. Please login again.
+          </div>
+        )}
 
-                {/* Email field */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Email Address
-                    </label>
-                    <input
-                        type="email"
-                        value={email}
-                        placeholder="you@example.com"
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full border border-slate-200 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
-                    />
-                </div>
-
-                {/* Password field */}
-                <div className="mb-6">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        value={password}
-                        placeholder="••••••••"
-                        onChange={(e) => setPassword(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                        className="w-full border border-slate-200 rounded-lg px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
-                    />
-                </div>
-
-                {/* Login button */}
-                <button
-                    onClick={()=>handleLogin()}
-                    disabled={loading}
-                    className="w-full bg-violet-600 hover:bg-violet-700 disabled:bg-violet-400 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
-                >
-                    {loading ? "Signing in..." : "Sign In"}
-                </button>
-
-                {/* Register link */}
-                <p className="text-center text-slate-500 text-sm mt-6">
-                    Don't have an account?{" "}
-                    <span
-                        onClick={() => navigate("/register")}
-                        className="text-violet-600 font-medium cursor-pointer hover:underline"
-                    >
-                        Register here
-                    </span>
-                </p>
-            </div>
+        {/* Header */}
+        <div className="text-center mb-7 sm:mb-8">
+          <span className="text-4xl sm:text-5xl inline-block drop-shadow-sm
+                           hover:scale-110 hover:rotate-12 transition-transform duration-300">
+            ⚔️
+          </span>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mt-3 tracking-tight">
+            Welcome back to{" "}
+            <span className="bg-linear-to-r from-teal-500 via-emerald-500 to-cyan-500 bg-clip-text text-transparent">
+              DevArena
+            </span>
+          </h1>
+          <p className="text-slate-400 dark:text-slate-500 mt-1.5 text-sm">
+            Sign in to continue your journey
+          </p>
         </div>
-    )
+
+        {/* Error */}
+        {errorMsg && (
+          <div className="bg-rose-50/90 dark:bg-rose-950/40 backdrop-blur-sm
+                          border border-rose-200 dark:border-rose-800/50 
+                          text-rose-600 dark:text-rose-400 text-sm 
+                          px-4 py-3 rounded-2xl mb-6 font-medium text-center">
+            {errorMsg}
+          </div>
+        )}
+
+        {/* Email */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            value={email}
+            placeholder="you@example.com"
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm
+                       border border-slate-200/80 dark:border-slate-700/60
+                       rounded-xl px-4 py-3 
+                       text-slate-800 dark:text-slate-100 
+                       placeholder-slate-400 dark:placeholder-slate-500
+                       focus:outline-none focus:ring-2 focus:ring-teal-500/40 
+                       focus:border-teal-400 dark:focus:border-teal-600
+                       transition-all duration-200"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            placeholder="••••••••"
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            className="w-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm
+                       border border-slate-200/80 dark:border-slate-700/60
+                       rounded-xl px-4 py-3 
+                       text-slate-800 dark:text-slate-100 
+                       placeholder-slate-400 dark:placeholder-slate-500
+                       focus:outline-none focus:ring-2 focus:ring-teal-500/40 
+                       focus:border-teal-400 dark:focus:border-teal-600
+                       transition-all duration-200"
+          />
+        </div>
+
+        {/* Login button */}
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-full py-3 sm:py-3.5 rounded-xl font-semibold text-white text-sm sm:text-base
+                     bg-linear-to-r from-teal-500 via-emerald-500 to-cyan-500
+                     hover:from-teal-600 hover:via-emerald-600 hover:to-cyan-600
+                     disabled:from-teal-400 disabled:via-emerald-400 disabled:to-cyan-400 
+                     disabled:cursor-not-allowed
+                     shadow-md shadow-teal-200/50 dark:shadow-teal-900/40
+                     hover:shadow-lg hover:shadow-teal-300/40
+                     active:scale-[0.98] transition-all duration-200"
+        >
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Signing in...
+            </span>
+          ) : (
+            "Sign In"
+          )}
+        </button>
+
+        {/* Register link */}
+        <p className="text-center text-slate-500 dark:text-slate-400 text-sm mt-6">
+          Don't have an account?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            className="text-teal-600 dark:text-teal-400 font-semibold cursor-pointer 
+                       hover:text-teal-700 dark:hover:text-teal-300 
+                       hover:underline transition-colors"
+          >
+            Register here
+          </span>
+        </p>
+      </div>
+    </div>
+  );
 }
+
 export default LoginPage;

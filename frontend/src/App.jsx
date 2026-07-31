@@ -15,6 +15,8 @@ import AdminLoginPage from './Pages/AdminLoginPage'
 import AdminDashboard from './Pages/AdminDashbord'
 import VerifyPage from './Pages/VerifyPage'
 import VerdictDashboard from './Pages/VerdictDashBoard'
+import ProfilePage from './Pages/ProfilePage'
+import { ThemeProvider } from './Context/ThemeContext'
 
 function MainLayout(){
   return(
@@ -28,6 +30,7 @@ function MainLayout(){
 function App() {
   return (
     <BrowserRouter>
+    <ThemeProvider>
       <AuthProvider>
         <div className="min-h-screen bg-slate-50">
         
@@ -37,10 +40,12 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/verify" element={<VerifyPage />} />
+            
 
             <Route element={<MainLayout/>}>
-            <Route path="/battle/verdict/:roomCode" 
+            <Route path="/verdict/:roomCode" 
             element={<ProtectedRoute><VerdictDashboard/></ProtectedRoute>}/>
+            <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
 
             <Route path="/problems" element={
               <ProtectedRoute><ProblemPage /></ProtectedRoute>
@@ -64,6 +69,7 @@ function App() {
           </Routes>
         </div>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }
