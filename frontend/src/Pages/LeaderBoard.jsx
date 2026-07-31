@@ -45,7 +45,7 @@ export function LeaderBoard() {
   /* ---------- LOADING ---------- */
   if (loading)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
                       dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
                       flex items-center justify-center">
         <div className="flex flex-col items-center gap-5">
@@ -61,7 +61,7 @@ export function LeaderBoard() {
   /* ---------- ERROR ---------- */
   if (error)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
                       dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
                       flex items-center justify-center px-4">
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl 
@@ -76,7 +76,7 @@ export function LeaderBoard() {
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white
-                       bg-gradient-to-r from-teal-500 to-emerald-500
+                       bg-linear-to-r from-teal-500 to-emerald-500
                        hover:from-teal-600 hover:to-emerald-600
                        shadow-md shadow-teal-200/40 dark:shadow-teal-900/30
                        transition-all duration-200 active:scale-95"
@@ -90,7 +90,7 @@ export function LeaderBoard() {
   /* ---------- EMPTY ---------- */
   if (leaderboard.length === 0)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 
                       dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
                       flex items-center justify-center px-4">
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl 
@@ -109,13 +109,13 @@ export function LeaderBoard() {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-emerald-50/30 
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-teal-50/20 to-emerald-50/30 
                     dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
                     transition-colors duration-300">
 
       {/* ========== HEADER ========== */}
       <div className="relative overflow-hidden 
-                      bg-gradient-to-br from-teal-600 via-emerald-600 to-cyan-600 
+                      bg-linear-to-br from-teal-600 via-emerald-600 to-cyan-600 
                       dark:from-teal-900 dark:via-emerald-900 dark:to-cyan-950
                       px-4 sm:px-8 py-10 sm:py-12">
         {/* liquid glows */}
@@ -219,7 +219,7 @@ export function LeaderBoard() {
               {/* Name + avatar */}
               <div className="col-span-7 sm:col-span-4 flex items-center gap-2.5 min-w-0">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full 
-                                bg-gradient-to-br from-teal-400 to-emerald-500 
+                                bg-linear-to-br from-teal-400 to-emerald-500 
                                 flex items-center justify-center
                                 shadow-md shadow-teal-200/40 dark:shadow-teal-900/30
                                 ring-2 ring-white dark:ring-slate-800">
