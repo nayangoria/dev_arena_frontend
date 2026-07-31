@@ -31,8 +31,9 @@ export default function ProfilePage() {
 
     async function getRooms() {
       try {
-        const response = await axios.post("/api/room/history",
-          { email: user.email, status: "FINISHED" }
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/room/history`,
+          { email: user.email, status: "FINISHED" },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!cancelled) setRooms(response.data || []);
       } catch (error) {
