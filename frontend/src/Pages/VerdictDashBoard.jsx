@@ -12,7 +12,7 @@ export default function VerdictDashboard() {
   const [tab, setTab] = useState("overview");
   const [aiStatus, setAiStatus] = useState(null);
   const { roomCode } = useParams();
-  const AI_JUDGE_API = import.meta.env.AI_JUDGE_URL || "http://localhost:8081";
+  const AI_JUDGE_API = import.meta.env.VITE_AI_JUDGE_URL || "http://localhost:8081";
   console.log(AI_JUDGE_API);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function VerdictDashboard() {
         if (!cancelled) setLoading(false);
       });
 
-    fetch(`${AI_JUDGE_API}1/api/judge/health`)
+    fetch(`${AI_JUDGE_API}/api/judge/health`)
       .then((r) => r.json())
       .then((data) => {
         if (!cancelled) setAiStatus(data);
