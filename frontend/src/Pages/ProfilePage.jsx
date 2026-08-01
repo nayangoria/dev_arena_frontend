@@ -6,7 +6,7 @@ import { BattleCard } from "../Component/BattleCard";
 import { useNavigate } from "react-router-dom";
 import Statcard from "../Component/Statcard";
 
-const AI_JUDGE_API = import.meta.env.AI_JUDGE_API || "http://localhost:8081";
+const AI_JUDGE_API = import.meta.env.VITE_AI_JUDGE_API || "http://localhost:8081";
 console.log(AI_JUDGE_API);
 
 export default function ProfilePage() {
