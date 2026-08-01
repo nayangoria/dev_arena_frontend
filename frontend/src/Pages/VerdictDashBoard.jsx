@@ -13,6 +13,7 @@ export default function VerdictDashboard() {
   const [aiStatus, setAiStatus] = useState(null);
   const { roomCode } = useParams();
   const AI_JUDGE_API = import.meta.env.AI_JUDGE_URL || "http://localhost:8081";
+  console.log(AI_JUDGE_API);
 
   useEffect(() => {
     if (!roomCode) return;
